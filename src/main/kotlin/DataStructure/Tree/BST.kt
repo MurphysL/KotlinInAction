@@ -156,7 +156,6 @@ fun BSTNode?.postOrder(){
     }
 }
 
-
 fun main(args: Array<String>) {
     root.insert(15)
     root.insert(6)

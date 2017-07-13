@@ -7,39 +7,154 @@ package DataStructure.Tree
  */
 class AVLNode(val key : Int){
     var balance = 0
+    var depth = 1
     var left : AVLNode? = null
     var right : AVLNode? = null
     var p : AVLNode? = null
 
-    override fun toString(): String = "[$key] : balance[$balance]"
+    override fun toString(): String = "[$key]{\n balance : $balance,\n depth : $depth \n}"
 }
 
 var head : AVLNode? = null
 
 fun AVLNode?.insert(value : Int){
-    val new : AVLNode = AVLNode(value)
-    var node : AVLNode? = this
-    var pre : AVLNode? = node
-
-    while(node != null){
-        pre = node
+    val node = this
+    if(node == null){
+        head = AVLNode(value)
+        head!!.balance = 0
+        head!!.depth = 1
+    }else{
         if(node.key > value){
-            node = node.left
+            if(node.left != null){
+                node.left.insert(value)
+            }else{
+                node.left = AVLNode(value)
+                node.left!!.p = node
+            }
         }else{
-            node = node.right
+            if(node.right != null){
+                node.right.insert(value)
+            }else{
+                node.right = AVLNode(value)
+                node.right!!.p = node
+            }
         }
+        node.calculateDepthAndBalance()
+        node.balance()
     }
+}
 
-    if(pre == null){
-        head = new
-    } else{
-        if(value < pre.key){
-            pre.left = new
+//右旋
+fun AVLNode.rightRotate(){
+    val node = this
+    val left_node : AVLNode = node.left!!
+    /**
+     *               o
+     *             /\
+     *           o  o
+     *         / \
+     *       o   o
+     *     /
+     *   o
+     */
+    node.right = left_node.right
+    left_node.right!!.p = node
+    left_node.right = node
+    left_node.right!!.p = left_node
+    node.depth -= 2
+    node.balance = 0
+    left_node.balance = 0
+
+    if(node.p == null){
+        head = left_node
+    }else{
+        if(node.p!!.left == node){
+            node.p!!.left = left_node
         }else{
-            pre.right = new
+            node.p!!.right = left_node
         }
     }
-    new.p = pre // 设置前驱
+    left_node.left = node.left
+}
+//左旋
+fun AVLNode.leftRotate(){
+    val node = this
+    val right_node : AVLNode= node.right!!
+
+    node.left = right_node.left
+    right_node.left!!.p = node
+    right_node.left = node
+    right_node.right!!.p = right_node
+    //待修改
+    node.depth -= 2
+    node.balance = 0
+    right_node.balance = 0
+
+    if(node.p == null){
+        head = right_node
+    }else{
+        if(node.p!!.right == node){
+            node.p!!.right = right_node
+        }else{
+            node.p!!.left = right_node
+        }
+    }
+    right_node.right = node.right
+}
+
+fun AVLNode.balance(){
+    val node = this
+    val left_node = node.left
+    val right_node = node.right
+
+    if(node.balance >= 2){
+        if(left_node!!.balance > 0){ // 右旋
+            node.rightRotate()
+        }else{ // 左旋->右旋
+            /**
+             *               o
+             *             /\
+             *           o  o
+             *         / \
+             *       o   o
+             *           \
+             *           o
+             */
+            node.left = left_node.right
+            left_node.right!!.p = node
+            node.rightRotate()
+        }
+    }else if(node.balance <= -2){
+        if(right_node!!.balance < 0){ // 左旋
+            node.leftRotate()
+        }else{ // 右旋 -> 左旋
+            node.right = right_node.left
+            right_node.left!!.p = node
+            node.leftRotate()
+        }
+    }
+}
+
+fun AVLNode.calculateDepthAndBalance(){
+    val left_node : AVLNode? = this.left
+    val right_node : AVLNode? = this.right
+    if(left_node != null && right_node != null){
+        if(left_node.depth > right_node.depth){
+            this.depth = left_node.depth + 1
+        }else{
+            this.depth = right_node.depth + 1
+        }
+        this.balance = left_node.depth - right_node.depth
+    }else if(left_node != null){
+        this.depth = left_node.depth + 1
+        this.balance = 1
+    }else if(right_node != null){
+        this.depth = right_node.depth + 1
+        this.balance = -1
+    }else{
+        this.depth = 1
+        this.balance = 0
+    }
 }
 
 fun AVLNode?.search(value : Int) : AVLNode?{
@@ -115,7 +230,6 @@ fun AVLNode.transplant(new : AVLNode?){
         head = new
     }else if(pre.left == origin){
         pre.left = new
-        println(pre.left?.key)
     }else{
         pre.right = new
     }
@@ -178,19 +292,19 @@ fun AVLNode?.postOrder(){
 }
 
 fun main(args: Array<String>) {
-    head.insert(2)
-    head.insert(1)
     head.insert(5)
     head.insert(3)
-    head.insert(6)
-    head.insert(4)
+//    head.insert(6)
+    head.insert(2)
+//    head.insert(4)
+//    head.insert(1)
 
-    head.delete(2)
+    //head.delete(2)
 
     head.midOrder()
-    head.postOrder()
-    head.preOrder()
-    head.successor()
-    head.predecessor()
+    //head.postOrder()
+    //head.preOrder()
+    //head.successor()
+    //head.predecessor()
 
 }

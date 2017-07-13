@@ -1,5 +1,7 @@
 package HTMLBuilder
 
+
+
 /**
  * 1.泛型实例化，解决代码重复
  * 2.a 标签
@@ -9,7 +11,7 @@ interface Element{
     fun render(builder : StringBuilder, indent : String)
 }
 
-open class TextElement(val name : String) : Element{
+open class TextElement(val name : String) : Element {
     override fun render(builder : StringBuilder, indent: String){
         builder.append("  $indent$name\n")
     }
