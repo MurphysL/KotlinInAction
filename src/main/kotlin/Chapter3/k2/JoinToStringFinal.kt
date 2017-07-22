@@ -1,4 +1,4 @@
-package Chapter3
+package Chapter3.k2
 
 /**
  * 扩展函数

@@ -1,4 +1,4 @@
-package Chapter3
+package Chapter3.k1
 
 /**
  * Created by MurphySL on 2017/5/20.
@@ -17,6 +17,7 @@ fun main(args: Array<String>) {
     println(map.javaClass)
 
     val strings = listOf("pi", "zhen pi", "li shi zhen pi")
+    println(strings)
     println(strings.last())
     val values = setOf(1, 2, 3)
     println(values.max())

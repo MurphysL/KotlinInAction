@@ -1,4 +1,4 @@
-package Chapter2
+package Chapter2.k3
 
 /**
  * Created by MurphySL on 2017/5/22.
@@ -7,7 +7,7 @@ interface Expr
 
 class Child(val value : Int) : Expr
 
-class Parent(val right : Expr , val left : Expr) : Expr
+class Parent(val right : Expr, val left : Expr) : Expr
 
 fun eval(e : Expr) : Int{
     if(e is Child){

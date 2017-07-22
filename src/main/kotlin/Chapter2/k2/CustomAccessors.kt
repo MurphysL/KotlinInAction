@@ -1,4 +1,4 @@
-package Chapter2
+package Chapter2.k2
 
 import java.util.*
 
@@ -10,7 +10,7 @@ class Rectangle(val height : Int , val width : Int){
     get() = height == width
 }
 
-fun createRandomSquare() : Rectangle{
+fun createRandomSquare() : Rectangle {
     val random = Random()
     val rectangle = Rectangle(random.nextInt(), random.nextInt())
     return rectangle
